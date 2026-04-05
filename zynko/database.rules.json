@@ -1,0 +1,39 @@
+{
+  "rules": {
+    "status": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid == $uid",
+        ".validate": "newData.hasChildren(['online', 'lastSeen', 'displayName'])",
+        "online": {
+          ".validate": "newData.isBoolean()"
+        },
+        "lastSeen": {
+          ".validate": "newData.isNumber()"
+        },
+        "displayName": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    "typing": {
+      "$communityId": {
+        "$uid": {
+          ".read": "auth != null && root.child('communities').child($communityId).child('members').child(auth.uid).exists()",
+          ".write": "auth != null && auth.uid == $uid && root.child('communities').child($communityId).child('members').child(auth.uid).exists()",
+          ".validate": "newData.hasChildren(['displayName', 'timestamp'])",
+          "displayName": {
+            ".validate": "newData.isString()"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+} 
